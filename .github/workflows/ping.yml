@@ -5,6 +5,9 @@ on:
     - cron: "*/10 * * * *"
   workflow_dispatch:
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   ping:
     runs-on: ubuntu-latest
@@ -25,4 +28,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPO: ${{ github.repository }}
           GITHUB_FILE_PATH: urls.json
-        run: python backend/ping.py
+        run: |
+          cd $GITHUB_WORKSPACE
+          python backend/ping.py
