@@ -1,9 +1,7 @@
 name: KeepAlive Ping
 
 on:
-  schedule:
-    - cron: "*/10 * * * *"
-  workflow_dispatch:
+  workflow_dispatch: # Triggered by cron-job.org every 10 min — reliable & on-time
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
