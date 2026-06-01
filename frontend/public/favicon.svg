@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <!-- Orange rounded square background -->
+  <rect width="32" height="32" rx="8" fill="#f97316"/>
+  <!-- Lightning bolt (matches the SVG path used in the navbar) -->
+  <path
+    d="M18 4L8 17h7v7l9-11h-7z"
+    fill="white"
+    stroke="white"
+    stroke-width="0.5"
+    stroke-linejoin="round"
+  />
+</svg>
