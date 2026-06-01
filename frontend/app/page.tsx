@@ -7,6 +7,7 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -33,7 +34,7 @@ export default function Home() {
       }
     } catch {
       setIsError(true);
-      setMessage("Could not connect to server. Try again.");
+      setMessage("Could not connect to server. Please try again.");
       setSubmitted(false);
     } finally {
       setLoading(false);
@@ -43,15 +44,20 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-[#fafaf9] text-gray-800 font-sans">
       {/* Navbar */}
-      <nav className="flex items-center justify-between px-4 sm:px-6 md:px-8 py-3 md:py-4 border-b border-gray-100 bg-white/80 backdrop-blur-md sticky top-0 z-50">
-        <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center">
+      <nav
+        role="navigation"
+        aria-label="Main navigation"
+        className="flex items-center justify-between px-4 sm:px-6 md:px-8 py-3 md:py-4 border-b border-gray-100 bg-white/90 backdrop-blur-md sticky top-0 z-50 shadow-sm"
+      >
+        <a href="#" className="flex items-center gap-2.5">
+          <div className="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center shadow-md shadow-orange-200">
             <svg
               className="w-4 h-4 text-white"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
               strokeWidth={2.5}
+              aria-hidden="true"
             >
               <path
                 strokeLinecap="round"
@@ -63,36 +69,35 @@ export default function Home() {
           <span className="text-lg font-extrabold text-gray-900 tracking-tight">
             KeepAlive
           </span>
-        </div>
+        </a>
+
+        {/* Desktop links */}
         <div className="hidden md:flex items-center gap-1 text-sm font-medium text-gray-500">
-          <a
-            href="#story"
-            className="px-3 py-1.5 rounded-lg hover:bg-gray-100 hover:text-gray-900 transition-colors"
-          >
-            Story
-          </a>
-          <a
-            href="#how"
-            className="px-3 py-1.5 rounded-lg hover:bg-gray-100 hover:text-gray-900 transition-colors"
-          >
-            How It Works
-          </a>
-          <a
-            href="#add"
-            className="px-3 py-1.5 rounded-lg hover:bg-gray-100 hover:text-gray-900 transition-colors"
-          >
-            Add URL
-          </a>
-          <div className="w-px h-4 bg-gray-200 mx-2" />
+          {[
+            { href: "#story", label: "Story" },
+            { href: "#how", label: "How It Works" },
+            { href: "#add", label: "Add URL" },
+          ].map((link) => (
+            <a
+              key={link.href}
+              href={link.href}
+              className="px-3 py-1.5 rounded-lg hover:bg-gray-100 hover:text-gray-900 transition-colors"
+            >
+              {link.label}
+            </a>
+          ))}
+          <div className="w-px h-4 bg-gray-200 mx-2" aria-hidden="true" />
           <a
             href="https://github.com/JAYACHARANAMBATI/keepalive"
             target="_blank"
+            rel="noopener noreferrer"
             className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gray-900 hover:bg-gray-700 text-white transition-colors text-xs font-bold"
           >
             <svg
               className="w-3.5 h-3.5"
               fill="currentColor"
               viewBox="0 0 24 24"
+              aria-hidden="true"
             >
               <path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.387-1.333-1.756-1.333-1.756-1.09-.745.083-.73.083-.73 1.205.085 1.838 1.236 1.838 1.236 1.07 1.835 2.807 1.305 3.492.998.108-.776.418-1.305.76-1.604-2.665-.305-5.467-1.332-5.467-5.93 0-1.31.468-2.38 1.235-3.22-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.3 1.23A11.5 11.5 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.29-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.12 3.176.77.84 1.233 1.91 1.233 3.22 0 4.61-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222 0 1.606-.015 2.896-.015 3.286 0 .322.216.694.825.576C20.565 21.796 24 17.298 24 12c0-6.63-5.37-12-12-12z" />
             </svg>
@@ -100,21 +105,134 @@ export default function Home() {
           </a>
           <a
             href="#add"
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-orange-500 hover:bg-orange-600 text-white transition-colors text-xs font-bold ml-1"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-orange-500 hover:bg-orange-600 text-white transition-colors text-xs font-bold ml-1 shadow-sm shadow-orange-200"
           >
+            <svg
+              className="w-3 h-3"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2.5}
+              aria-hidden="true"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M13 10V3L4 14h7v7l9-11h-7z"
+              />
+            </svg>
             Keep Alive — Free
           </a>
         </div>
+
+        {/* Mobile hamburger */}
+        <button
+          className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+          aria-expanded={mobileMenuOpen}
+        >
+          {mobileMenuOpen ? (
+            <svg
+              className="w-5 h-5 text-gray-700"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          ) : (
+            <svg
+              className="w-5 h-5 text-gray-700"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M4 6h16M4 12h16M4 18h16"
+              />
+            </svg>
+          )}
+        </button>
       </nav>
+
+      {/* Mobile menu */}
+      {mobileMenuOpen && (
+        <div className="md:hidden fixed top-[57px] left-0 right-0 z-40 bg-white border-b border-gray-100 shadow-lg px-4 py-4 flex flex-col gap-1">
+          {[
+            { href: "#story", label: "Story" },
+            { href: "#how", label: "How It Works" },
+            { href: "#add", label: "Add URL" },
+          ].map((link) => (
+            <a
+              key={link.href}
+              href={link.href}
+              onClick={() => setMobileMenuOpen(false)}
+              className="px-4 py-3 rounded-xl hover:bg-gray-50 text-sm font-semibold text-gray-700 transition-colors"
+            >
+              {link.label}
+            </a>
+          ))}
+          <div className="h-px bg-gray-100 my-2" />
+          <a
+            href="https://github.com/JAYACHARANAMBATI/keepalive"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 px-4 py-3 rounded-xl bg-gray-900 text-white text-sm font-bold"
+          >
+            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.387-1.333-1.756-1.333-1.756-1.09-.745.083-.73.083-.73 1.205.085 1.838 1.236 1.838 1.236 1.07 1.835 2.807 1.305 3.492.998.108-.776.418-1.305.76-1.604-2.665-.305-5.467-1.332-5.467-5.93 0-1.31.468-2.38 1.235-3.22-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.3 1.23A11.5 11.5 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.29-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.12 3.176.77.84 1.233 1.91 1.233 3.22 0 4.61-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222 0 1.606-.015 2.896-.015 3.286 0 .322.216.694.825.576C20.565 21.796 24 17.298 24 12c0-6.63-5.37-12-12-12z" />
+            </svg>
+            View on GitHub
+          </a>
+          <a
+            href="#add"
+            onClick={() => setMobileMenuOpen(false)}
+            className="flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-orange-500 text-white text-sm font-bold"
+          >
+            <svg
+              className="w-4 h-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2.5}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M13 10V3L4 14h7v7l9-11h-7z"
+              />
+            </svg>
+            Keep Alive — Free
+          </a>
+        </div>
+      )}
 
       {/* Hero */}
       <section className="relative flex flex-col items-center justify-center text-center px-4 sm:px-6 md:px-10 py-16 sm:py-20 md:py-28 overflow-hidden min-h-[90svh] md:min-h-0">
         {/* Background blobs */}
-        <div className="absolute top-0 left-1/4 w-72 sm:w-96 h-72 sm:h-96 bg-orange-100 rounded-full blur-3xl opacity-40 -z-10" />
-        <div className="absolute bottom-0 right-1/4 w-64 sm:w-80 h-64 sm:h-80 bg-blue-100 rounded-full blur-3xl opacity-30 -z-10" />
+        <div
+          className="absolute top-0 left-1/4 w-72 sm:w-96 h-72 sm:h-96 bg-orange-100 rounded-full blur-3xl opacity-40 -z-10"
+          aria-hidden="true"
+        />
+        <div
+          className="absolute bottom-0 right-1/4 w-64 sm:w-80 h-64 sm:h-80 bg-blue-100 rounded-full blur-3xl opacity-30 -z-10"
+          aria-hidden="true"
+        />
 
-        <div className="inline-flex items-center gap-2 bg-white border border-orange-200 text-orange-600 text-xs font-bold px-3 sm:px-4 py-1.5 sm:py-2 rounded-full mb-6 sm:mb-8 shadow-sm tracking-widest uppercase">
-          <span className="w-2 h-2 bg-orange-400 rounded-full animate-pulse inline-block" />
+        <div className="inline-flex items-center gap-2 bg-white border border-orange-200 text-orange-600 text-xs font-bold px-3 sm:px-4 py-1.5 sm:py-2 rounded-full mb-6 sm:mb-8 shadow-sm tracking-widest uppercase select-none">
+          <span
+            className="w-2 h-2 bg-orange-400 rounded-full animate-pulse inline-block"
+            aria-hidden="true"
+          />
           <span className="hidden sm:inline">
             Open Source · Free Forever · Zero Cost
           </span>
@@ -129,6 +247,7 @@ export default function Home() {
               className="absolute -bottom-2 left-0 w-full"
               viewBox="0 0 300 12"
               fill="none"
+              aria-hidden="true"
             >
               <path
                 d="M2 9 Q75 2 150 8 Q225 14 298 6"
@@ -192,7 +311,7 @@ export default function Home() {
         </div>
 
         {/* Stats bar */}
-        <div className="mt-12 sm:mt-16 grid grid-cols-2 sm:flex sm:flex-wrap justify-center gap-6 sm:gap-8 text-center w-full max-w-md sm:max-w-none px-4 sm:px-0">
+        <dl className="mt-12 sm:mt-16 grid grid-cols-2 sm:flex sm:flex-wrap justify-center gap-6 sm:gap-10 text-center w-full max-w-md sm:max-w-none px-4 sm:px-0">
           {[
             { value: "₹0", label: "Forever Free" },
             { value: "10 min", label: "Ping Interval" },
@@ -200,15 +319,15 @@ export default function Home() {
             { value: "100%", label: "Open Source" },
           ].map((s) => (
             <div key={s.label}>
-              <div className="text-xl sm:text-2xl font-black text-gray-900">
+              <dt className="text-xl sm:text-2xl font-black text-gray-900">
                 {s.value}
-              </div>
-              <div className="text-xs text-gray-400 font-medium mt-1 uppercase tracking-wider">
+              </dt>
+              <dd className="text-xs text-gray-400 font-semibold mt-1 uppercase tracking-wider">
                 {s.label}
-              </div>
+              </dd>
             </div>
           ))}
-        </div>
+        </dl>
       </section>
 
       {/* Story */}
@@ -630,8 +749,11 @@ export default function Home() {
         <div className="max-w-5xl mx-auto w-full">
           {/* Header */}
           <div className="mb-10 sm:mb-16">
-            <span className="inline-flex items-center gap-2 bg-white border border-gray-200 text-gray-500 text-xs font-bold px-4 py-2 rounded-full mb-5 sm:mb-6 tracking-widest uppercase">
-              <span className="w-1.5 h-1.5 bg-orange-400 rounded-full animate-pulse" />
+            <span className="inline-flex items-center gap-2 bg-white border border-gray-200 text-gray-500 text-xs font-bold px-4 py-2 rounded-full mb-5 sm:mb-6 tracking-widest uppercase select-none">
+              <span
+                className="w-1.5 h-1.5 bg-orange-400 rounded-full animate-pulse"
+                aria-hidden="true"
+              />
               Who this is for
             </span>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-gray-900 leading-tight mb-4 max-w-2xl">
@@ -649,9 +771,28 @@ export default function Home() {
           {/* Scenario cards — written like real moments */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
             {/* Card 1 — Student */}
-            <div className="bg-white border border-gray-100 rounded-2xl p-7 shadow-sm">
+            <div className="bg-white border border-gray-100 rounded-2xl p-7 shadow-sm hover:shadow-md transition-shadow duration-200">
               <div className="flex items-center gap-2 mb-5">
-                <span className="text-xs font-bold text-blue-600 bg-blue-50 border border-blue-100 px-3 py-1 rounded-full">
+                <span className="inline-flex items-center gap-1.5 text-xs font-bold text-blue-600 bg-blue-50 border border-blue-100 px-3 py-1 rounded-full">
+                  <svg
+                    className="w-3 h-3"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2.5}
+                    aria-hidden="true"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M12 14l9-5-9-5-9 5 9 5z"
+                    />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"
+                    />
+                  </svg>
                   College Student
                 </span>
               </div>
@@ -682,9 +823,23 @@ export default function Home() {
             </div>
 
             {/* Card 2 — Hackathon */}
-            <div className="bg-white border border-gray-100 rounded-2xl p-7 shadow-sm">
+            <div className="bg-white border border-gray-100 rounded-2xl p-7 shadow-sm hover:shadow-md transition-shadow duration-200">
               <div className="flex items-center gap-2 mb-5">
-                <span className="text-xs font-bold text-orange-600 bg-orange-50 border border-orange-100 px-3 py-1 rounded-full">
+                <span className="inline-flex items-center gap-1.5 text-xs font-bold text-orange-600 bg-orange-50 border border-orange-100 px-3 py-1 rounded-full">
+                  <svg
+                    className="w-3 h-3"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2.5}
+                    aria-hidden="true"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M13 10V3L4 14h7v7l9-11h-7z"
+                    />
+                  </svg>
                   Hackathon Team
                 </span>
               </div>
@@ -722,8 +877,22 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
             {/* Card 3 — Portfolio */}
-            <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm">
-              <span className="text-xs font-bold text-green-600 bg-green-50 border border-green-100 px-3 py-1 rounded-full">
+            <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow duration-200">
+              <span className="inline-flex items-center gap-1.5 text-xs font-bold text-green-600 bg-green-50 border border-green-100 px-3 py-1 rounded-full">
+                <svg
+                  className="w-3 h-3"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2.5}
+                  aria-hidden="true"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                  />
+                </svg>
                 Portfolio / Job Hunt
               </span>
               <p className="text-gray-900 font-bold text-base leading-snug mt-4 mb-2">
@@ -737,8 +906,22 @@ export default function Home() {
             </div>
 
             {/* Card 4 — AI App */}
-            <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm">
-              <span className="text-xs font-bold text-purple-600 bg-purple-50 border border-purple-100 px-3 py-1 rounded-full">
+            <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow duration-200">
+              <span className="inline-flex items-center gap-1.5 text-xs font-bold text-purple-600 bg-purple-50 border border-purple-100 px-3 py-1 rounded-full">
+                <svg
+                  className="w-3 h-3"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2.5}
+                  aria-hidden="true"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                  />
+                </svg>
                 AI App Demo
               </span>
               <p className="text-gray-900 font-bold text-base leading-snug mt-4 mb-2">
@@ -752,8 +935,22 @@ export default function Home() {
             </div>
 
             {/* Card 5 — SaaS */}
-            <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm">
-              <span className="text-xs font-bold text-pink-600 bg-pink-50 border border-pink-100 px-3 py-1 rounded-full">
+            <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow duration-200">
+              <span className="inline-flex items-center gap-1.5 text-xs font-bold text-pink-600 bg-pink-50 border border-pink-100 px-3 py-1 rounded-full">
+                <svg
+                  className="w-3 h-3"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2.5}
+                  aria-hidden="true"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
+                  />
+                </svg>
                 SaaS MVP
               </span>
               <p className="text-gray-900 font-bold text-base leading-snug mt-4 mb-2">
@@ -967,6 +1164,17 @@ export default function Home() {
       {/* How It Works */}
       <section id="how" className="bg-white py-24 px-6">
         <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-14">
+            <span className="inline-block bg-gray-100 text-gray-600 text-xs font-bold px-4 py-1.5 rounded-full mb-4 tracking-widest uppercase border border-gray-200">
+              Under the Hood
+            </span>
+            <h2 className="text-4xl sm:text-5xl font-black text-gray-900 mb-4">
+              How It Works
+            </h2>
+            <p className="text-gray-400 text-base sm:text-lg max-w-xl mx-auto">
+              Three files. Three free services. Zero cost.
+            </p>
+          </div>
           {/* Two-col deep dive */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             <div className="bg-gray-950 rounded-3xl p-7">
@@ -1260,7 +1468,7 @@ export default function Home() {
       >
         <div className="max-w-xl mx-auto">
           <div className="text-center mb-10">
-            <span className="inline-block bg-orange-100 text-orange-600 text-xs font-bold px-4 py-1.5 rounded-full mb-4 tracking-widest uppercase border border-orange-200">
+            <span className="inline-block bg-orange-100 text-orange-600 text-xs font-bold px-4 py-1.5 rounded-full mb-4 tracking-widest uppercase border border-orange-200 select-none">
               Take Action Now
             </span>
             <h2 className="text-5xl font-black text-gray-900">
@@ -1274,11 +1482,18 @@ export default function Home() {
             {!submitted ? (
               <form onSubmit={handleSubmit} className="flex flex-col gap-5">
                 <div>
-                  <label className="text-sm font-semibold text-gray-700 mb-2 block">
+                  <label
+                    htmlFor="server-url"
+                    className="text-sm font-semibold text-gray-700 mb-1.5 block"
+                  >
                     Your Backend URL
                   </label>
+                  {/* Input guidance */}
                   <div className="relative">
-                    <div className="absolute left-4 top-1/2 -translate-y-1/2">
+                    <div
+                      className="absolute left-4 top-1/2 -translate-y-1/2"
+                      aria-hidden="true"
+                    >
                       <svg
                         className="w-4 h-4 text-gray-400"
                         fill="none"
@@ -1294,19 +1509,21 @@ export default function Home() {
                       </svg>
                     </div>
                     <input
+                      id="server-url"
                       type="url"
                       placeholder="https://yourapp.onrender.com"
                       value={url}
                       onChange={(e) => setUrl(e.target.value)}
                       required
-                      className="w-full pl-10 pr-4 py-4 rounded-xl bg-gray-50 border border-gray-200 text-gray-800 outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100 text-base transition"
+                      autoComplete="url"
+                      className="w-full pl-10 pr-4 py-4 rounded-xl bg-gray-50 border border-gray-200 text-gray-800 outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100 text-base transition placeholder:text-gray-300"
                     />
                   </div>
                 </div>
                 <button
                   type="submit"
                   disabled={loading}
-                  className="flex items-center justify-center gap-2 p-4 bg-gray-900 hover:bg-orange-500 text-white font-bold rounded-xl transition-colors duration-200 shadow-lg shadow-gray-900/20 text-base disabled:opacity-50"
+                  className="flex items-center justify-center gap-2 p-4 bg-gray-900 hover:bg-orange-500 text-white font-bold rounded-xl transition-colors duration-200 shadow-lg shadow-gray-900/20 text-base disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {loading ? (
                     <>
@@ -1350,38 +1567,109 @@ export default function Home() {
                     </>
                   )}
                 </button>
+
+                {/* Message block — covers all cases */}
                 {message && (
-                  <div
-                    className={`flex items-center gap-2 text-sm font-medium p-3 rounded-xl ${
-                      isError
-                        ? "bg-red-50 text-red-600 border border-red-100"
-                        : "bg-green-50 text-green-600 border border-green-100"
-                    }`}
-                  >
-                    <svg
-                      className="w-4 h-4 flex-shrink-0"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      strokeWidth={2}
+                  <div role="alert" className="flex flex-col gap-2">
+                    <div
+                      className={`flex items-start gap-2.5 text-sm font-medium p-3.5 rounded-xl ${
+                        isError
+                          ? message.toLowerCase().includes("already")
+                            ? "bg-amber-50 text-amber-700 border border-amber-200"
+                            : "bg-red-50 text-red-600 border border-red-100"
+                          : "bg-green-50 text-green-600 border border-green-100"
+                      }`}
                     >
-                      {isError ? (
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"
-                        />
-                      ) : (
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                        />
-                      )}
-                    </svg>
-                    {message}
+                      <svg
+                        className="w-4 h-4 flex-shrink-0 mt-0.5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth={2}
+                      >
+                        {!isError ? (
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                          />
+                        ) : message.toLowerCase().includes("already") ? (
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M13 16h-1v-4h-1m1-4h.01M12 2a10 10 0 100 20A10 10 0 0012 2z"
+                          />
+                        ) : (
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"
+                          />
+                        )}
+                      </svg>
+                      <span>{message}</span>
+                    </div>
+
+                    {/* Contact block — shown only on real errors (not duplicate) */}
+                    {isError && !message.toLowerCase().includes("already") && (
+                      <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 mt-1">
+                        <p className="text-xs font-bold text-gray-700 mb-2.5 flex items-center gap-1.5">
+                          <svg
+                            className="w-3.5 h-3.5 text-orange-500"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            strokeWidth={2.5}
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                            />
+                          </svg>
+                          Still not working? Ping me directly — I&apos;ll fix it
+                          for you.
+                        </p>
+                        <div className="flex flex-col sm:flex-row gap-2.5">
+                          <a
+                            href="mailto:ambatijayacharan18@gmail.com"
+                            className="flex items-center gap-2 bg-white border border-gray-200 hover:border-red-300 text-gray-600 hover:text-red-600 px-3.5 py-2.5 rounded-lg text-xs font-semibold transition-colors flex-1 justify-center sm:justify-start"
+                          >
+                            <svg
+                              className="w-4 h-4 text-red-500 flex-shrink-0"
+                              fill="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 010 19.366V5.457c0-.904.732-1.636 1.636-1.636h.749L12 11.73l9.615-7.909h.749A1.636 1.636 0 0124 5.457z" />
+                            </svg>
+                            ambatijayacharan18@gmail.com
+                          </a>
+                          <a
+                            href="https://wa.me/919640179624"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-2 bg-white border border-gray-200 hover:border-green-400 text-gray-600 hover:text-green-600 px-3.5 py-2.5 rounded-lg text-xs font-semibold transition-colors flex-1 justify-center sm:justify-start"
+                          >
+                            <svg
+                              className="w-4 h-4 text-green-500 flex-shrink-0"
+                              fill="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+                            </svg>
+                            WhatsApp: +91 96401 79624
+                          </a>
+                        </div>
+                        <p className="text-xs text-gray-400 mt-2.5 leading-relaxed">
+                          Send me your URL and what happened. I&apos;ll add it
+                          manually and get back to you within a few hours. No
+                          worries at all.
+                        </p>
+                      </div>
+                    )}
                   </div>
                 )}
+
                 <div className="flex items-center gap-3 pt-2">
                   {[
                     {
@@ -1474,16 +1762,18 @@ export default function Home() {
 
       {/* Footer */}
       <footer className="bg-white border-t border-gray-100 py-14 px-6">
-        <div className="max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8">
-          <div>
+        <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-start justify-between gap-10">
+          {/* Brand */}
+          <div className="max-w-xs">
             <div className="flex items-center gap-2 mb-3">
-              <div className="w-7 h-7 bg-orange-500 rounded-lg flex items-center justify-center">
+              <div className="w-7 h-7 bg-orange-500 rounded-lg flex items-center justify-center shadow-sm shadow-orange-200">
                 <svg
                   className="w-3.5 h-3.5 text-white"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
                   strokeWidth={2.5}
+                  aria-hidden="true"
                 >
                   <path
                     strokeLinecap="round"
@@ -1496,7 +1786,7 @@ export default function Home() {
                 KeepAlive
               </span>
             </div>
-            <p className="text-gray-400 text-sm max-w-xs leading-relaxed">
+            <p className="text-gray-400 text-sm leading-relaxed">
               Built by a student who got tired of cold starts during demos. Made
               for every developer who deserves better.
             </p>
@@ -1506,6 +1796,7 @@ export default function Home() {
                 className="w-3.5 h-3.5 text-red-400"
                 fill="currentColor"
                 viewBox="0 0 24 24"
+                aria-hidden="true"
               >
                 <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
               </svg>
@@ -1513,12 +1804,14 @@ export default function Home() {
               <a
                 href="https://www.linkedin.com/in/jaya-charan-ambati-901052254/"
                 target="_blank"
+                rel="noopener noreferrer"
                 className="inline-flex items-center gap-1.5 text-xs font-bold text-gray-700 hover:text-blue-600 transition-colors"
               >
                 <svg
                   className="w-3.5 h-3.5 text-blue-600"
                   fill="currentColor"
                   viewBox="0 0 24 24"
+                  aria-hidden="true"
                 >
                   <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
                 </svg>
@@ -1526,29 +1819,114 @@ export default function Home() {
               </a>
             </div>
           </div>
-          <div className="flex flex-col items-center md:items-end gap-3">
-            <a
-              href="https://github.com/JAYACHARANAMBATI/keepalive"
-              target="_blank"
-              className="inline-flex items-center gap-2 bg-gray-900 hover:bg-gray-700 text-white font-semibold px-5 py-2.5 rounded-xl transition-colors text-sm"
-            >
-              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.387-1.333-1.756-1.333-1.756-1.09-.745.083-.73.083-.73 1.205.085 1.838 1.236 1.838 1.236 1.07 1.835 2.807 1.305 3.492.998.108-.776.418-1.305.76-1.604-2.665-.305-5.467-1.332-5.467-5.93 0-1.31.468-2.38 1.235-3.22-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.3 1.23A11.5 11.5 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.29-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.12 3.176.77.84 1.233 1.91 1.233 3.22 0 4.61-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222 0 1.606-.015 2.896-.015 3.286 0 .322.216.694.825.576C20.565 21.796 24 17.298 24 12c0-6.63-5.37-12-12-12z" />
-              </svg>
-              View on GitHub
-            </a>
-            <a
-              href="https://www.linkedin.com/in/jaya-charan-ambati-901052254/"
-              target="_blank"
-              className="inline-flex items-center gap-2 bg-blue-50 hover:bg-blue-100 text-blue-700 font-semibold px-5 py-2.5 rounded-xl transition-colors text-sm border border-blue-100"
-            >
-              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
-              </svg>
-              Connect on LinkedIn
-            </a>
-            <p className="text-gray-400 text-xs">Open source · Free Forever</p>
+          {/* Links grid */}
+          <div className="flex flex-col sm:flex-row gap-8 sm:gap-14">
+            <div>
+              <p className="text-xs font-black text-gray-400 tracking-widest uppercase mb-3">
+                Product
+              </p>
+              <nav
+                aria-label="Footer product links"
+                className="flex flex-col gap-2.5"
+              >
+                {[
+                  { href: "#story", label: "The Story" },
+                  { href: "#how", label: "How It Works" },
+                  { href: "#add", label: "Add Your URL" },
+                ].map((l) => (
+                  <a
+                    key={l.href}
+                    href={l.href}
+                    className="text-sm text-gray-500 hover:text-gray-900 transition-colors"
+                  >
+                    {l.label}
+                  </a>
+                ))}
+              </nav>
+            </div>
+            <div>
+              <p className="text-xs font-black text-gray-400 tracking-widest uppercase mb-3">
+                Connect
+              </p>
+              <div className="flex flex-col gap-2.5">
+                <a
+                  href="https://github.com/JAYACHARANAMBATI/keepalive"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-gray-900 transition-colors"
+                >
+                  <svg
+                    className="w-4 h-4"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                  >
+                    <path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.387-1.333-1.756-1.333-1.756-1.09-.745.083-.73.083-.73 1.205.085 1.838 1.236 1.838 1.236 1.07 1.835 2.807 1.305 3.492.998.108-.776.418-1.305.76-1.604-2.665-.305-5.467-1.332-5.467-5.93 0-1.31.468-2.38 1.235-3.22-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.3 1.23A11.5 11.5 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.29-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.12 3.176.77.84 1.233 1.91 1.233 3.22 0 4.61-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222 0 1.606-.015 2.896-.015 3.286 0 .322.216.694.825.576C20.565 21.796 24 17.298 24 12c0-6.63-5.37-12-12-12z" />
+                  </svg>
+                  GitHub
+                </a>
+                <a
+                  href="https://www.linkedin.com/in/jaya-charan-ambati-901052254/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-blue-600 transition-colors"
+                >
+                  <svg
+                    className="w-4 h-4 text-blue-600"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                  >
+                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+                  </svg>
+                  LinkedIn
+                </a>
+                <a
+                  href="mailto:ambatijayacharan18@gmail.com"
+                  className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-red-500 transition-colors"
+                >
+                  <svg
+                    className="w-4 h-4 text-red-400"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                    aria-hidden="true"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                    />
+                  </svg>
+                  Email
+                </a>
+              </div>
+            </div>
           </div>
+        </div>
+        {/* Bottom bar */}
+        <div className="max-w-5xl mx-auto mt-10 pt-6 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-3">
+          <p className="text-xs text-gray-400">
+            © {new Date().getFullYear()} KeepAlive. Open source · Free Forever.
+          </p>
+          <p className="text-xs text-gray-400 flex items-center gap-1.5">
+            <svg
+              className="w-3 h-3 text-green-500"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={3}
+              aria-hidden="true"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M5 13l4 4L19 7"
+              />
+            </svg>
+            Built with Next.js · Deployed on Vercel · ₹0/month
+          </p>
         </div>
       </footer>
     </main>
